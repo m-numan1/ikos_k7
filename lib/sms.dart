@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 //import 'package:flutter_sms/flutter_sms.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 // import 'package:flutter_sms/flutter_sms.dart';
 
 class Message extends StatefulWidget {
@@ -30,21 +31,40 @@ class _MessageState extends State<Message> {
     _controllerMessage = TextEditingController();
   }
 
+  // Future<void> _sendSMS(List<String> recipients) async {
+  //  // bool permission = await Permission.sms.request().isGranted;
+
+  //   // if (permission == true) {
+  //   //   try {
+  //   //     String _result = await sendSMS(
+  //   //       message: _controllerMessage.text,
+  //   //       recipients: recipients,
+  //   //       sendDirect: sendDirect,
+  //   //     );
+  //   //     setState(() => _message = _result);
+  //   //   } catch (error) {
+  //   //     setState(() => _message = error.toString());
+  //   //   }
+  //   // }
+  // }
   Future<void> _sendSMS(List<String> recipients) async {
     bool permission = await Permission.sms.request().isGranted;
 
-    // if (permission == true) {
-    //   try {
-    //     String _result = await sendSMS(
-    //       message: _controllerMessage.text,
-    //       recipients: recipients,
-    //       sendDirect: sendDirect,
-    //     );
-    //     setState(() => _message = _result);
-    //   } catch (error) {
-    //     setState(() => _message = error.toString());
-    //   }
-    // }
+    if (permission == true) {
+      try {
+        final Uri smsLaunchUri = Uri(
+          scheme: 'sms',
+          path: recipients.first,
+          queryParameters: <String, String>{
+            'body': Uri.encodeComponent(_controllerMessage.text),
+          },
+        );
+        await launchUrl(smsLaunchUri);
+        setState(() => _message = _controllerMessage.text);
+      } catch (error) {
+        setState(() => _message = error.toString());
+      }
+    }
   }
 
   // Future<bool> _canSendSMS() async {
@@ -139,17 +159,17 @@ class _MessageState extends State<Message> {
             ),
           ),
           const Divider(),
-          ListTile(
-            title: const Text('Can send SMS'),
-            subtitle: Text(_canSendSMSMessage),
-            trailing: IconButton(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              icon: const Icon(Icons.check),
-              onPressed: () {
-                // _canSendSMS();
-              },
-            ),
-          ),
+          // ListTile(
+          //   title: const Text('Can send SMS'),
+          //   subtitle: Text(_canSendSMSMessage),
+          //   trailing: IconButton(
+          //     padding: const EdgeInsets.symmetric(vertical: 16),
+          //     icon: const Icon(Icons.check),
+          //     onPressed: () {
+          //       // _canSendSMS();
+          //     },
+          //   ),
+          // ),
           // SwitchListTile(
           //     title: const Text('Send Direct'),
           //     subtitle: const Text(
