@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_sms/flutter_sms.dart';
+//import 'package:flutter_sms/flutter_sms.dart';
 import 'package:permission_handler/permission_handler.dart';
 // import 'package:flutter_sms/flutter_sms.dart';
 
@@ -33,26 +33,26 @@ class _MessageState extends State<Message> {
   Future<void> _sendSMS(List<String> recipients) async {
     bool permission = await Permission.sms.request().isGranted;
 
-    if (permission == true) {
-      try {
-        String _result = await sendSMS(
-          message: _controllerMessage.text,
-          recipients: recipients,
-          sendDirect: sendDirect,
-        );
-        setState(() => _message = _result);
-      } catch (error) {
-        setState(() => _message = error.toString());
-      }
-    }
+    // if (permission == true) {
+    //   try {
+    //     String _result = await sendSMS(
+    //       message: _controllerMessage.text,
+    //       recipients: recipients,
+    //       sendDirect: sendDirect,
+    //     );
+    //     setState(() => _message = _result);
+    //   } catch (error) {
+    //     setState(() => _message = error.toString());
+    //   }
+    // }
   }
 
-  Future<bool> _canSendSMS() async {
-    bool _result = await canSendSMS();
-    setState(() => _canSendSMSMessage =
-        _result ? 'This unit can send SMS' : 'This unit cannot send SMS');
-    return _result;
-  }
+  // Future<bool> _canSendSMS() async {
+  //   bool _result = await canSendSMS();
+  //   setState(() => _canSendSMSMessage =
+  //       _result ? 'This unit can send SMS' : 'This unit cannot send SMS');
+  //   return _result;
+  // }
 
   Widget _phoneTile(String name) {
     return Padding(
@@ -146,7 +146,7 @@ class _MessageState extends State<Message> {
               padding: const EdgeInsets.symmetric(vertical: 16),
               icon: const Icon(Icons.check),
               onPressed: () {
-                _canSendSMS();
+                // _canSendSMS();
               },
             ),
           ),
